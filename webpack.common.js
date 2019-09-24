@@ -10,6 +10,26 @@ module.exports = {
                 use: {
                     loader: 'babel-loader'
                 }
+            },
+            {
+                test: /\.(png|jpeg|jpg|gif)$/,
+                use: {
+                    loader: 'file-loader',
+                    options: {
+                        name: '[name].[hash:5].[ext]',
+                        outputPath: './images/'
+                    }
+                }
+            },
+            {
+                test: /\.(svg)$/,
+                use: {
+                    loader: 'file-loader',
+                    options: {
+                        name: '[name].[ext]',
+                        outputPath: './svg/'
+                    }
+                }
             }
         ]
     }
