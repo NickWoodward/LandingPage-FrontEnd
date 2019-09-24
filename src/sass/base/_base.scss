@@ -7,16 +7,18 @@
 }
 
 html {
+    position: relative;
+    height: 100%;
     box-sizing: border-box;
     font-size: 62.5%;
 }
 
 body {
     position: relative;
-    
-}
-
-.page-container {
-    background: #a9a9a9;
-    border: 1px solid red;
+    height: inherit;
+    width: 100%;
+    background: lightgrey;
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 400;
+    line-height: 1.6;
 }

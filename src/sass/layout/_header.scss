@@ -1,0 +1,11 @@
+header {
+    position: fixed;
+    display: flex;
+
+    // Fixed space between header components, padding on the outside
+    justify-content: space-between;
+    padding: $page-padding--m;
+    width: 100%;
+    height: $header-height--m;
+    border: 1px solid green;
+}
