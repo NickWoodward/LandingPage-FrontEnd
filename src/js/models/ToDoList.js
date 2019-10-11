@@ -6,22 +6,38 @@ export default class ToDoList {
         this.itemList = [];
     }
 
+    // UPDATE/RETRIEVE DATA FROM MODEL
+    getItemList() {
+        return this.itemList;
+    }
+
+    addItem(item) {
+        console.log('Adding Item');
+
+        this.itemList.push(item);
+    }
+
+
+    // UPDATE/RETRIEVE DATA ON/FROM SERVER
     async getData() {
         try {
             const result = await axios('http://127.0.0.1:8080/item-list/items');
             this.itemList = result.data;
-            console.log(result);
         } catch(err) {
             console.log(err);
         }
     }
 
-    async addListItem(item) {
+    async saveListItem(item) {
         const headers = {
             'Content-Type': 'application/json'
         };
+
         const data = JSON.stringify({
-            title: item.title
+            title: item.title,
+            content: item.content,
+            author: item.author,
+            completed: item.completed
         });
 
         try {
@@ -33,7 +49,7 @@ export default class ToDoList {
                 }
             )
             .then(response => {
-                console.log(`${response.status} ${response.statusText}`);
+                console.log(`${response.status}: ${response.data.message}`);
             });
         } catch(err) {
             console.log(err.response.data.message);

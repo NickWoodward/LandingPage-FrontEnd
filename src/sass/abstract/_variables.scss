@@ -1,19 +1,26 @@
 // COLOURS
 $base-font-color: #fff;
+$base-font-color--dark: rgba(226, 226, 226, 0.897);
+$base-font-color--inactive: rgba(112, 112, 112, 0.897);
 $component-background-color: rgba(51,51,51,.4);
 $text-dark-grey-color: rgb(68, 68, 68);
 
 // HEIGHTS
 $header-height--m: 8rem;
+$todolist-form-height: 9rem;
+$todolist-controls-height--m: 4rem;
 
 // WIDTHS
 $todolist-width--m: 50rem;
 
 // PADDING
 $page-padding--m: 1rem;
-$todolist-padding--v: 2rem;
+$todolist-form-padding--v: 2rem;
+$todolist-padding--h: 2rem;
+$todolist-padding: 1rem;
 
 // MARGINS
+$todolist-margin: 2rem;
 
 // BORDERS
 $thin-light-border: 1px solid rgba(255,255,255, .1);
@@ -21,7 +28,9 @@ $thin-light-border: 1px solid rgba(255,255,255, .1);
 // FONTS
 $greeting-font-size--m: 2.3rem;
 $todolist-font-size--m: 1.6rem;
+$todolist-font-size--s: 1.4rem;
 
 // ICONS
-$todolist-icon-size--m: 3rem;
+$todolist-icon-size--m: 2.4rem;
+$todolist-icon-size--nav: 2rem;
 

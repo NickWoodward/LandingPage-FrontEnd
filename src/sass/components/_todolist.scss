@@ -1,22 +1,72 @@
-.todolist-wrapper{
-    display: inline-flex;
-    flex-direction: column;
-    border: $thin-light-border;
-}
-
 .todolist {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+
+
+    height: 70vh;
+    width: $todolist-width--m;
+    margin: $todolist-margin;
+    
     color: $base-font-color;
     font-size: $todolist-font-size--m;
+    
+    border: $thin-light-border;
+    background: $component-background-color;
+
+    ////////// TDL FORM //////////
+    &__form {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        border-bottom: $thin-light-border;
+        padding: $todolist-form-padding--v $todolist-padding--h;
+    }
+
+    &__form-control {
+        display: flex;
+        flex-direction: column;
+        flex-basis: 60%;
+    }
+    
+    &__submit {
+        padding: 1rem 2.5rem;
+        border: rgba(255,255,255, .1);
+        background: rgba(255,255,255, 1);
+        border-radius: 3px;
+        font-size: 1.2rem;
+        color: $text-dark-grey-color;
+    }
+    
+    &__title-label {
+        padding: .5rem 0;
+    }
+    
+    &__title-input {
+        height: 3rem;
+        padding: 1rem;
+        font-size: 1.4rem;
+    }
+
+    ////////// TDL ITEMS //////////
+    &__items {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
 
     &__item {
         display: flex;
-        width: $todolist-width--m;
-        background: $component-background-color;
-        padding: $todolist-padding--v;
-        border-bottom: 1px solid rgba(255,255,255, .1);
+        height: 6rem;
+        border-bottom: $thin-light-border;
+        padding: 0 $todolist-padding--h;
 
-        & * {
-            // border: 1px solid red;
+        &--end-element {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-grow: 1;
+            color: $base-font-color--dark;
         }
     }
 
@@ -38,58 +88,66 @@
         align-items: center;
     }
 
-    // -------
-
     &__icon {
         fill: $base-font-color;
         height: $todolist-icon-size--m;
         width: $todolist-icon-size--m;
-        margin-right: 1rem;
+        margin-right: .5rem;
 
         &--bulletpoint {
             // bullet point size reduced to match other icons
             height: calc(#{$todolist-icon-size--m} - .8rem);
         }
     }
-}
 
+    ////////// PAGE CONTROLS //////////
+    &__nav {
+        position: absolute;
+        display: flex;
+        justify-content: space-between;
+        bottom: 0;
+        width: 100%;
+        height: $todolist-controls-height--m;
+        padding: 0 $todolist-padding--h;
+        font-size: $todolist-font-size--s;
 
-// Input form
-.input-wrapper {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    width: $todolist-width--m;
-    color: $base-font-color;
-    font-size: $todolist-font-size--m;
-    padding: 2rem;
-    background: $component-background-color;
-    border-bottom: 1px solid rgba(255,255,255, .1);
-    //  border: 1px solid red;
-}
+        
+        & * {
+            // border: 1px solid red;
+        }
+    }
 
-.form-control{
-    display: flex;
-    flex-direction: column;
-    width: 60%;
-    // border: 1px solid red;
-}
+    &__nav-page-number {
+        display: flex;
+        align-items: center;
+        padding: 0 .5rem;
+        
+        &--active {
+            margin-bottom: -1px;
+            border-bottom: 1px solid $base-font-color;
+        }
 
-.submit {
-    padding: 1rem 2.5rem;
-    border: rgba(255,255,255, .1);
-    background: rgba(255,255,255, 1);
-    border-radius: 3px;
-    font-size: 1.2rem;
-    color: $text-dark-grey-color;
-}
+        &-wrapper {
+            display: flex;
+            align-items: center;
+            height: 100%;
+        }
+    }
 
-.title-label {
-    padding: .5rem 0;
-}
+    &__nav-arrow {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
 
-.title-input {
-    height: 3rem;
-    padding: 1rem;
-    font-size: 1.4rem;
+        &-icon {
+            height: $todolist-icon-size--nav;
+            width: $todolist-icon-size--nav;
+            fill: $base-font-color--inactive;
+
+            &--active {
+                fill: $base-font-color;
+            }
+        }
+    }
 }

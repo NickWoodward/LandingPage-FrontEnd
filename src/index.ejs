@@ -13,21 +13,23 @@
     <!-- <header>
         header
     </header> -->
-
+  
     <section class="hero">
-        <div class="greeting">nick
+        <div class="greeting">
             <!--injected by app.js-->
         </div>
-        <div class="todolist-wrapper">
-            <form class="input-wrapper" action="#" method="POST">
-                <div class="form-control">
-                    <label for="title" class="title-label">Title</label>
-                    <input type="text" class="title-input" name="price">
+        <div class="todolist">
+            <div class="todolist__message"></div>
+            <form class="todolist__form" action="" method="">
+                <div class="todolist__form-control">
+                    <label for="title" class="todolist__title-label">Title</label>
+                    <input type="text" class="todolist__title-input" name="price">
                 </div>
-                <input type="submit" class="submit">
+                <input type="submit" class="todolist__submit">
             </form>
-            <ul class="todolist">
-             <!--   <li class="todolist__item">
+            <ul class="todolist__items">
+                <!-- Dummy Item used to access item height in the JS before rendering -->
+                  <li class="todolist__item">
                     <div class="todolist__bulletpoint-wrapper">
                         <svg class="todolist__icon--bulletpoint todolist__icon">
                             <use xlink:href="svg/spritesheet.svg#ios-arrow-right"></use>
@@ -48,8 +50,21 @@
                             <use xlink:href="svg/spritesheet.svg#ios-close-outline"></use>
                         </svg>
                     </div>
-                </li> -->
+                </li>
             </ul>
+            <div class="todolist__nav">
+                <!-- <div class="todolist__nav-arrow todolist__nav-arrow--left">
+                    <svg class="todolist__nav-arrow-icon">
+                        <use xlink:href="svg/spritesheet.svg#ios-arrow-left"></use>
+                    </svg>
+                </div>
+                <div class="todolist__nav-page-numbers">1, 2, 3...</div>
+                <div class="todolist__nav-arrow todolist__nav-arrow--right">
+                    <svg class="todolist__nav-arrow-icon">
+                        <use xlink:href="svg/spritesheet.svg#ios-arrow-right"></use>
+                    </svg>
+                </div> -->
+            </div>
         </div>
     </section>
 
