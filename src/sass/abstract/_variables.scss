@@ -1,32 +1,36 @@
 // COLOURS
-$base-font-color: #fff;
-$base-font-color--dark: rgba(226, 226, 226, 0.897);
-$base-font-color--inactive: rgba(112, 112, 112, 0.897);
-$component-background-color: rgba(51,51,51,.4);
+$base-font-color: rgb(46, 46, 46);
+$base-font-color--dark: rgb(104, 104, 104);
+$base-font-color--inactive: rgba(182, 182, 182, 0.801);
+$component-background-color: rgba(255, 255, 255, 0.918);
 $text-dark-grey-color: rgb(68, 68, 68);
+$msg-background-color: rgb(248, 248, 248);
+$msg-text-color--ok: rgb(0, 18, 180);
+$msg-text-color--err: rgb(204, 28, 28);
 
 // HEIGHTS
 $header-height--m: 8rem;
 $todolist-form-height: 9rem;
-$todolist-controls-height--m: 4rem;
+$todolist-controls-height--m: 6rem;
+$todolist-item-height--m: 8rem;
 
 // WIDTHS
-$todolist-width--m: 50rem;
+$todolist-width--m: 55rem;
 
 // PADDING
 $page-padding--m: 1rem;
 $todolist-form-padding--v: 2rem;
-$todolist-padding--h: 2rem;
+$todolist-padding--h: 3rem;
 $todolist-padding: 1rem;
 
 // MARGINS
 $todolist-margin: 2rem;
 
 // BORDERS
-$thin-light-border: 1px solid rgba(255,255,255, .1);
+$thin-light-border: 1px solid rgba(233, 229, 229, 0.678);
 
 // FONTS
-$greeting-font-size--m: 2.3rem;
+$greeting-font-size--l: 2.8rem;
 $todolist-font-size--m: 1.6rem;
 $todolist-font-size--s: 1.4rem;
 
