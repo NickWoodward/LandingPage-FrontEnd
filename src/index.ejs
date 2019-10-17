@@ -10,16 +10,14 @@
 </head>
 
 <body>
-    <!-- <header>
-        header
-    </header> -->
-  
-    <section class="hero">
+    <header>
         <div class="greeting">
             <!--injected by app.js-->
         </div>
+    </header>
+
+    <section class="hero">
         <div class="todolist">
-            <div class="todolist__message"></div>
             <form class="todolist__form" action="" method="">
                 <div class="todolist__form-control">
                     <label for="title" class="todolist__title-label">Title</label>
@@ -29,7 +27,7 @@
             </form>
             <ul class="todolist__items">
                 <!-- Dummy Item used to access item height in the JS before rendering -->
-                  <li class="todolist__item">
+                <li class="todolist__item">
                     <div class="todolist__bulletpoint-wrapper">
                         <svg class="todolist__icon--bulletpoint todolist__icon">
                             <use xlink:href="svg/spritesheet.svg#ios-arrow-right"></use>

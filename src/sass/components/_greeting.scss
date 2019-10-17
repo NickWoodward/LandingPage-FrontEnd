@@ -2,9 +2,8 @@
     display: inline-flex;
     align-items: center;
     height: $header-height--m;
-    padding: .75rem 2rem;
-    border: 1px solid rgba(255,255,255, .1);
-    background-color: $component-background-color;
-    font-size: $greeting-font-size--m;
-    color: $base-font-color;
+    font-size: $greeting-font-size--l;
+    font-weight: 600;
+    // color: $base-font-color--dark;
+    color: rgb(119, 33, 33);
 }

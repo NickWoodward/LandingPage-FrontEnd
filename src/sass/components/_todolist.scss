@@ -57,7 +57,7 @@
 
     &__item {
         display: flex;
-        height: 6rem;
+        height: $todolist-item-height--m;
         border-bottom: $thin-light-border;
         padding: 0 $todolist-padding--h;
 
@@ -93,6 +93,7 @@
         height: $todolist-icon-size--m;
         width: $todolist-icon-size--m;
         margin-right: .5rem;
+        cursor: pointer;
 
         &--bulletpoint {
             // bullet point size reduced to match other icons
@@ -110,17 +111,13 @@
         height: $todolist-controls-height--m;
         padding: 0 $todolist-padding--h;
         font-size: $todolist-font-size--s;
-
-        
-        & * {
-            // border: 1px solid red;
-        }
     }
 
     &__nav-page-number {
         display: flex;
         align-items: center;
         padding: 0 .5rem;
+        cursor: pointer;
         
         &--active {
             margin-bottom: -1px;
@@ -139,6 +136,7 @@
         align-items: center;
         justify-content: center;
         height: 100%;
+        cursor: pointer;
 
         &-icon {
             height: $todolist-icon-size--nav;
@@ -148,6 +146,32 @@
             &--active {
                 fill: $base-font-color;
             }
+        }
+    }
+
+    &__message {
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        bottom: 0;
+        height: $todolist-controls-height--m;
+        width: 100%;
+        padding: 0 $todolist-padding--h;
+
+        opacity: 1;
+        transition: opacity 2s;
+        transition-delay: 2s;
+
+        background: $msg-background-color;
+
+        &--ok {
+            color: $msg-text-color--ok;
+        }
+
+        &--err {
+            color: $msg-text-color--err;
         }
     }
 }
