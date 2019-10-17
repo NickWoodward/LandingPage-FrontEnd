@@ -9,8 +9,10 @@ export const clearList = () => {
     elements.tdl.innerHTML = '';
 };
 
-export const clearErrorMessages = () => {
-    elements.tdlMsg.innerHTML = '';
+export const clearMessages = () => {
+    const msgElement = document.querySelector('.todolist__message');
+
+    if (msgElement) msgElement.parentElement.removeChild(msgElement);
 };
 
 const getListHeight = () => {
@@ -24,23 +26,27 @@ const getListHeight = () => {
     return availableHeight;
 };
 
-const calcNumDisplayItems = (listLength, listHeight, itemHeight) => {
+const calcItemsPerPage = (listHeight, itemHeight) => {
     // Calculate how many items will fit in the available height
     const numItemsPerPage = Math.floor(listHeight / itemHeight);
 
     return numItemsPerPage;
 };
 
+export const calcNumOfPages = (itemLength, itemHeight) => {
+    const listHeight = getListHeight();
+    const itemsPerPage = calcItemsPerPage(listHeight, itemHeight);
+
+    return Math.ceil(itemLength / itemsPerPage);
+};
+
 export const renderToDoList = (itemList, itemHeight, page = 1) => {
-    console.log('rendering: ', itemList);
     // Set the list height to the available space
     const listHeight = getListHeight();
     elements.tdlItems.style.height = `${listHeight}px`;
 
     // Calculate the number of items that'll fit in that space
-    const numItemsPerPage = calcNumDisplayItems(itemList.length, listHeight, itemHeight);
-
-    console.log(`Number of items that fit: ${numItemsPerPage}`)
+    const numItemsPerPage = calcItemsPerPage(listHeight, itemHeight);
 
     // Calculate the start and end points for pagination
     const start = (page - 1) * numItemsPerPage;
@@ -54,8 +60,6 @@ export const renderToDoList = (itemList, itemHeight, page = 1) => {
     // Render the pagination controls
     renderPaginationControls(page, itemList.length, numItemsPerPage);
 
-    console.log(`Start of list: ${start}, End of list: ${end}`);
-
     // Remove placeholder/current items
     elements.tdlItems.innerHTML = '';
 
@@ -64,8 +68,8 @@ export const renderToDoList = (itemList, itemHeight, page = 1) => {
         renderItem(item);
     });
 
-    // If the num of items able to fit in the available space > the num of items, render a 'no more items' element
-    if (numItemsPerPage > itemList.length) renderEndElement();
+    // If the list length is not divisible by the items/page, and it's the last page, add the 'no more items' placeholder
+    if (itemList.length % numItemsPerPage !== 0 && page === calcNumOfPages(itemList.length, itemHeight)) renderEndElement();
 
     // Change the items' heights
     document.querySelectorAll('.todolist__item').forEach(item => {
@@ -75,7 +79,7 @@ export const renderToDoList = (itemList, itemHeight, page = 1) => {
 
 const renderItem = item => {
     const markup = `
-        <li class="todolist__item">
+        <li class="todolist__item" data-itemid=${item.id}>
             <div class="todolist__bulletpoint-wrapper">
                 <svg class="todolist__icon--bulletpoint todolist__icon">
                     <use xlink:href="svg/spritesheet.svg#ios-arrow-right"></use>
@@ -107,7 +111,6 @@ const renderItem = item => {
 const renderPaginationControls = (page, numOfItems, itemsPerPage) => {
 
     const pages = Math.ceil(numOfItems / itemsPerPage);
-    console.log(pages);
     if (page === 1 && pages > 1) {
         // highlight next button
         renderNavItems('next', page, pages);
@@ -147,47 +150,24 @@ const renderNavItems = (type, page, pages) => {
 
 
 const renderPageNumbers = (page, totalPages) => {
-    let markup;
+    let markup = '';
+    let x = 0;
+    let end = totalPages;
 
-    // Single page
-    if (page === 1 && totalPages === 1) {
-        markup = "<div class='todolist__nav-page-number--active todolist__nav-page-number'>1</div>";
-        // 2 pages, 1st page current
-    } else if (page === 1 && totalPages === 2) {
-        markup = `
-            <div class="todolist__nav-page-number--active todolist__nav-page-number">1</div>
-            <div class="todolist__nav-page-number">2</div>
-        `;
-        // 2 pages, 2nd page current
-    } else if (page == 2 && totalPages === 2) {
-        markup = `
-            <div class="todolist__nav-page-number">1</div>
-            <div class="todolist__nav-page-number--active todolist__nav-page-number">2</div>
-        `;
-        // >= 3 pages, 1st page current
-    } else if (page === 1 && totalPages >= 3) {
-        markup = `
-            <div class="todolist__nav-page-number--active todolist__nav-page-number">1</div>
-            <div class="todolist__nav-page-number">2</div>
-            <div class="todolist__nav-page-number">3</div>
-            ${totalPages > page ? "<div class='todolist__nav-page-number'>...</div>" : ""}
-        `;
-        // current page is last page
-    } else if (page === totalPages) {
-        markup = `
-            <div class="todolist__nav-page-number--active todolist__nav-page-number">${page - 2}</div>
-            <div class="todolist__nav-page-number">${page - 1}</div>
-            <div class="todolist__nav-page-number">${page}</div>
-        `;
-        // normal logic
-    } else {
-        markup = `
-            <div class="todolist__nav-page-number">${page - 1}</div>
-            <div class="todolist__nav-page-number--active todolist__nav-page-number">${page}</div>
-            <div class="todolist__nav-page-number">${page + 1}</div>
-            ${totalPages > page ? "<div class='todolist__nav-page-number'>...</div>" : ""}
-        `;
+    // If the page is 1, the end point is either +2, or the total page # (ie 1 or 2)
+    if (page === 1 && page + 2 <= totalPages) {
+        end = page + 2;
     }
+    // Page > 1
+    else if (page > 1 && page + 1 <= totalPages) {
+        end = page + 1;
+    }
+
+    for (x; x < end; x++) {
+        markup += `<div class="${x === page - 1 ? "todolist__nav-page-number--active todolist__nav-page-number" : "todolist__nav-page-number"}" data-goto="${x + 1}">${x + 1}</div>`;
+    }
+
+    if (end != totalPages) markup += `<div class="todolist__nav-page-number" data-goto="${totalPages}">...</div>`;
 
     return markup;
 };
@@ -202,10 +182,30 @@ const renderEndElement = () => {
     elements.tdlItems.insertAdjacentHTML('beforeend', markup);
 };
 
-export const renderError = msg => {
+export const renderMessage = (msg, status, fade) => {
+    // Delete old message
+    const old = document.querySelector('.todolist__message');
+    if (old) old.parentElement.removeChild(old);
+
     const markup = `
-        <p>${msg}</p>
+        <div class="todolist__message todolist__message${status ? "--ok" : "--err"}">${msg}</div>
     `;
 
-    elements.tdlMsg.insertAdjacentHTML('beforeend', markup);
+    elements.tdl.insertAdjacentHTML('beforeend', markup);
+
+    if (fade) {
+        const message = document.querySelector('.todolist__message');
+
+        // Have to wait to change the opacity, probably due to event queue?
+        setTimeout(() => {
+            // Change the message opacity
+            message.style.opacity = '0';
+        }, 100);
+
+        // Remove the message element
+        setTimeout(() => {
+            document.querySelector('.todolist__message').parentElement.removeChild(message);
+        }, 2000);
+    }
 };
+
