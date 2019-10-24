@@ -1,7 +1,12 @@
 import { elements } from './base';
+import * as validate from '../validation';
 
 export const getTitle = () => {
     return elements.tdlTitleInput.value;
+};
+
+export const clearInputs = () => {
+    elements.tdlTitleInput.value = '';
 };
 
 
@@ -38,6 +43,26 @@ export const calcNumOfPages = (itemLength, itemHeight) => {
     const itemsPerPage = calcItemsPerPage(listHeight, itemHeight);
 
     return Math.ceil(itemLength / itemsPerPage);
+};
+
+export const renderEditModal = () => {
+    const markup = `
+        <div class="edit-modal">
+            <form class="edit-modal__form">
+                <div class="edit-modal__control">
+                    <label class="edit-modal__title-label edit-modal__label">Title</label>
+                    <input class="edit-modal__title-input edit-modal__input" type="text">
+                </div>
+                <input class="edit-modal__submit" type="submit">
+
+            </form>
+            <svg class="edit-modal__icon--close edit-modal__icon">
+                <use xlink:href="svg/spritesheet.svg#ios-close-outline"></use>
+            </svg>
+        </div>
+    `;
+
+    elements.tdl.insertAdjacentHTML('afterbegin', markup);
 };
 
 export const renderToDoList = (itemList, itemHeight, page = 1) => {
@@ -87,14 +112,14 @@ const renderItem = item => {
             </div>
             <div class="todolist__item-heading">${item.title}</div>
             <div class="todolist__buttons-wrapper">
-                <svg class="todolist__edit-icon todolist__icon">
+                <svg class="todolist__icon--edit todolist__icon">
                     <use xlink:href="svg/spritesheet.svg#ios-compose-outline"></use>
                 </svg>
                 
-                <svg class="todolist__complete-icon todolist__icon">
+                <svg class="todolist__icon--complete todolist__icon">
                     <use xlink:href="svg/spritesheet.svg#ios-checkmark-outline"></use>
                 </svg>
-                <svg class="todolist__close-icon todolist__icon">
+                <svg class="todolist__icon--close todolist__icon">
                     <use xlink:href="svg/spritesheet.svg#ios-close-outline"></use>
                 </svg>
             </div>
@@ -183,7 +208,7 @@ const renderEndElement = () => {
 };
 
 export const renderMessage = (msg, status, fade) => {
-    // Delete old message
+    // Guard against old message if one is still present (shouldn't be)
     const old = document.querySelector('.todolist__message');
     if (old) old.parentElement.removeChild(old);
 
@@ -195,17 +220,22 @@ export const renderMessage = (msg, status, fade) => {
 
     if (fade) {
         const message = document.querySelector('.todolist__message');
-
         // Have to wait to change the opacity, probably due to event queue?
         setTimeout(() => {
             // Change the message opacity
             message.style.opacity = '0';
         }, 100);
+    }
 
-        // Remove the message element
-        setTimeout(() => {
-            document.querySelector('.todolist__message').parentElement.removeChild(message);
-        }, 2000);
+    // Removing the message called by transition event listener in app.js
+};
+
+export const deleteMessage = element => {
+    if (element) {
+        element.parentElement.removeChild(element);
     }
 };
 
+export const validateListItem = input => {
+    return validate.validateListItem(input)
+}

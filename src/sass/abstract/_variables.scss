@@ -1,5 +1,6 @@
 // COLOURS
 $base-font-color: rgb(46, 46, 46);
+$base-font-color--alternate:rgb(119, 33, 33);
 $base-font-color--dark: rgb(104, 104, 104);
 $base-font-color--inactive: rgba(182, 182, 182, 0.801);
 $component-background-color: rgba(255, 255, 255, 0.918);
@@ -7,6 +8,8 @@ $text-dark-grey-color: rgb(68, 68, 68);
 $msg-background-color: rgb(248, 248, 248);
 $msg-text-color--ok: rgb(0, 18, 180);
 $msg-text-color--err: rgb(204, 28, 28);
+$btn-close-color: rgb(119, 33, 33);
+$btn-complete-color: rgb(101, 153, 42);
 
 // HEIGHTS
 $header-height--m: 8rem;
@@ -28,6 +31,8 @@ $todolist-margin: 2rem;
 
 // BORDERS
 $thin-light-border: 1px solid rgba(233, 229, 229, 0.678);
+$thin-dark-border: 1px solid rgba(175, 172, 172, 0.651);
+
 
 // FONTS
 $greeting-font-size--l: 2.8rem;
@@ -37,4 +42,5 @@ $todolist-font-size--s: 1.4rem;
 // ICONS
 $todolist-icon-size--m: 2.4rem;
 $todolist-icon-size--nav: 2rem;
+$modal-icon-size--m: 2.6rem;
 

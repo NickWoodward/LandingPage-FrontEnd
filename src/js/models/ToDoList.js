@@ -18,9 +18,16 @@ export default class ToDoList {
     removeItem(itemid) {
         const index = this.itemList.findIndex(item => item.id === itemid);
 
-        console.log('Deleting from list: ' + itemid);
         // Remove the item from the list array
         this.itemList.splice(index, 1);
+    }
+
+    getItem(itemid) {
+        return this.itemList.find(item => item.id === itemid);
+    }
+
+    updateItem(itemid) {
+
     }
 
 
@@ -67,13 +74,32 @@ export default class ToDoList {
         try {
             await axios.delete('http://127.0.0.1:8080/item-list/items/' + itemid)
                 .then(response => {
-                    console.log(`
-                        Item Deleted async:
-                        ${response.data}
-                    `);
+                    console.log(`Item Deleted`);
                 });
 
         } catch (err) {
+            console.log(err);
+        }
+    }
+
+    async editListItem(item) {
+        const id = item.id;
+        const headers = {
+            'Content-Type': 'application/json'
+        };
+        const data = JSON.stringify({
+            title: item.title,
+            content: item.content,
+            author: item.author,
+            completed: item.completed
+        });
+
+        try{
+            await axios.put('http://127.0.0.1:8080/item-list/item/' + id, data, {headers})
+                .then(response => {
+                    console.log(data);
+                });
+        } catch(err) {
             console.log(err);
         }
     }

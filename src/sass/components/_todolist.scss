@@ -78,7 +78,6 @@
 
     &__item-heading {
         flex-grow: 1;
-
         display: flex;
         align-items: center;
     }
@@ -94,6 +93,24 @@
         width: $todolist-icon-size--m;
         margin-right: .5rem;
         cursor: pointer;
+
+        &--edit, &--complete, &--close {
+            &:hover {
+                transform: scale(1.10);
+            }
+        }
+
+        &--edit {
+
+        }
+
+        &--complete {
+            fill: $btn-complete-color;
+        }
+
+        &--close {
+            fill: $btn-close-color;
+        }
 
         &--bulletpoint {
             // bullet point size reduced to match other icons
