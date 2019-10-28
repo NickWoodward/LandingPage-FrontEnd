@@ -35,57 +35,57 @@ class Controller {
 
     addListItem() {
 
-            const item = {
-                id: uniqid(),
-                title: toDoListView.getTitle(),
-                content: 'Dummy Content',
-                author: 'Nick',
-                completed: false
-            }
+        const item = {
+            id: uniqid(),
+            title: toDoListView.getTitle(),
+            content: 'Dummy Content',
+            author: 'Nick',
+            completed: false
+        }
 
-            // Validate the item input
-            const err = toDoListView.validateListItem(item);
-            if(err.error) {
-                const errorStr = err.error.toString();
+        // Validate the item input
+        const err = toDoListView.validateListItem(item);
+        if (err.error) {
+            const errorStr = err.error.toString();
 
-                const index = errorStr.indexOf('"');
+            const index = errorStr.indexOf('"');
 
-                // Remove the 'ValidationError' prefix
-                let msg = errorStr.slice(index, errorStr.length);
+            // Remove the 'ValidationError' prefix
+            let msg = errorStr.slice(index, errorStr.length);
 
-                // Capitalise the fieldname
-                msg = msg[0] + msg[1].toUpperCase() + msg.slice(2);
-                
-                // Render the error message
-                toDoListView.renderMessage(msg, false, true);
+            // Capitalise the fieldname
+            msg = msg[0] + msg[1].toUpperCase() + msg.slice(2);
 
-            } else {
+            // Render the error message
+            toDoListView.renderMessage(msg, false, true);
 
-                // Wipe inputs
-                toDoListView.clearInputs();
+        } else {
 
-                // Wipe any previous error messages
-                toDoListView.clearMessages();
+            // Wipe inputs
+            toDoListView.clearInputs();
 
-                // Add to TDL array
-                this.toDoList.addItem(item);
+            // Wipe any previous error messages
+            toDoListView.clearMessages();
 
-                // Calc how many pages
-                const numPages = toDoListView.calcNumOfPages(this.toDoList.itemList.length, this.itemHeight);
+            // Add to TDL array
+            this.toDoList.addItem(item);
 
-                // Then get the TDL list and render on the last page
-                toDoListView.renderToDoList(this.toDoList.getItemList(), this.itemHeight, numPages);
+            // Calc how many pages
+            const numPages = toDoListView.calcNumOfPages(this.toDoList.itemList.length, this.itemHeight);
 
-                // Then save the TDL item to the DB
-                this.toDoList.saveListItem(item)
-                    .then(response => {
-                        console.log(response)
-                        toDoListView.renderMessage('Item Added', true, true);
-                    })
-                    .catch(err => toDoListView.renderMessage('Error: The item was not saved'));
-                
-                } 
-            // **** NB, TODO: Remove item from model array if it doesn't save to DB
+            // Then get the TDL list and render on the last page
+            toDoListView.renderToDoList(this.toDoList.getItemList(), this.itemHeight, numPages);
+
+            // Then save the TDL item to the DB
+            this.toDoList.saveListItem(item)
+                .then(response => {
+                    console.log(response)
+                    toDoListView.renderMessage('Item Added', true, true);
+                })
+                .catch(err => toDoListView.renderMessage('Error: The item was not saved'));
+
+        }
+        // **** NB, TODO: Remove item from model array if it doesn't save to DB
 
     }
 
@@ -105,17 +105,17 @@ class Controller {
             });
     }
 
-    async editListItem(itemid) {
+    async editListItem(itemid, title) {
         console.log(itemid);
 
-        // Get the item from the local array
-        let item = this.toDoList.getItem(itemid);
+        // Get the item from the local array to populate the new item
+        const item = this.toDoList.getItem(itemid);
+        // Get the index of the item
+        const itemIndex = this.toDoList.getItemIndex(itemid);
 
-        console.log(item);
-        // Create an item with either the form data if present, or the item data
         const newItem = {
             id: itemid,
-            title: item.title,
+            title: title,
             content: item.content,
             author: item.author,
             completed: item.completed
@@ -127,12 +127,12 @@ class Controller {
         // item found && !err
         if (item && !err.error) {
             // Save to DB
-            await this.toDoList.editListItem(item)
+            await this.toDoList.editListItem(newItem)
                 .then(response => {
-                    console.log(response);
-
-                    // replace the item with the new item
-                    item = {...newItem};
+                    // Replace the item with the new item
+                    this.toDoList.getItemList()[itemIndex] = newItem;
+                    // Render the new list
+                    toDoListView.renderToDoList(this.toDoList.getItemList(), this.itemHeight);
                 })
                 .catch(err => {
                     console.log(err);
@@ -193,25 +193,117 @@ class Controller {
 
         }.bind(this));
 
-        // Add listeners to list items
+        // Add listeners to list items, item controls, modals and modal controls
         elements.tdl.addEventListener('click', function (e) {
-            const closeBtn = e.target.closest('.todolist__icon--close');
+            // List Item / Controls
+            const listItem = e.target.closest('.todolist__item');
+            const deleteBtn = e.target.closest('.todolist__icon--close');
             const editBtn = e.target.closest('.todolist__icon--edit');
-            const editModal = e.target.closest('.edit-modal');
 
-            // Close button clicked
-            if (closeBtn) {
-                // Get the itemid
-                const itemid = closeBtn.closest('.todolist__item').dataset.itemid;
-                console.log(`IN THE LISTENER: ${itemid}`);
-                this.deleteListItem(itemid);
-            } else if (editBtn) {
-                const itemid = editBtn.closest('.todolist__item').dataset.itemid;
-                const item = this.toDoList.getItem(itemid);
-                toDoListView.renderEditModal(item);
+            // Edit Modal / Controls
+            const editModal = e.target.closest('.edit-modal');
+            const editModalClose = e.target.closest('.edit-modal__icon--close');
+            const editModalSubmit = e.target.closest('.edit-modal__submit');
+
+            // Details Modal / Controls
+            const detailsModal = e.target.closest('.details-modal');
+            const detailsModalClose = e.target.closest('.details-modal__icon--close');
+
+            // ITEM EVENT
+            if (listItem) {
+                // Set current itemid (instance variable for access in modals)
+                this.currentItemid = listItem.dataset.itemid;
+                // Get the item from the itemlist array
+                const item = this.toDoList.getItem(this.currentItemid);
+
+                // Delete button
+                if (deleteBtn) {
+                    if (this.currentItemid) this.deleteListItem(this.currentItemid);
+
+                    // Edit button
+                } else if (editBtn) {
+                    // Render the edit modal with the item
+                    toDoListView.renderEditModal(item);
+
+                    // Anywhere else (open details modal)
+                } else {
+                    e.preventDefault();
+                    toDoListView.renderItemDetails(item);
+                }
+
+                // EDIT MODAL EVENT
             } else if (editModal) {
-                editModal.parentElement.removeChild(editModal);
+                // Submit button
+                if (editModalSubmit) {
+                    e.preventDefault();
+
+                    // Get form data
+                    const modalTitle = toDoListView.getModalFields();
+
+                    // Use the controller's current item property to edit the correct list item
+                    if (this.currentItemid) this.editListItem(this.currentItemid, modalTitle);
+
+                    // Remove the edit modal
+                    editModal.parentElement.removeChild(editModal);
+
+                    // Close button clicked
+                } else if (editModalClose) {
+                    // Remove the edit modal
+                    editModal.parentElement.removeChild(editModal);
+                }
+
+                // DETAILS MODAL EVENT
+            } else if (detailsModalClose) {
+                detailsModal.parentElement.removeChild(detailsModal);
             }
+
+            // // Close button clicked
+            // if (closeBtn) {
+            //     // Get the itemid
+            //     const itemid = closeBtn.closest('.todolist__item').dataset.itemid;
+            //     this.deleteListItem(itemid);
+            // // Edit button clicked
+            // } else if (editBtn) {
+            //     // Get the list item id
+            //     const itemid = editBtn.closest('.todolist__item').dataset.itemid;
+            //     // Store the itemid in the controller, to be later accessed in the modal
+            //     this.currentItemid = itemid;
+
+            //     // Pass the relevant object to the view to be rendered
+            //     const item = this.toDoList.getItem(itemid);
+            //     toDoListView.renderEditModal(item);
+
+            // // Edit modal already visible
+            // } else if (editModal) {
+
+            //     // Submit button clicked
+            //     if(modalSubmit) {
+            //         e.preventDefault();
+
+            //         // Get form data
+            //         const modalTitle = toDoListView.getModalFields();
+
+            //         // Use the controller's current item property to edit the correct list item
+            //         if(this.currentItemid) this.editListItem(this.currentItemid, modalTitle);
+
+            //         // Remove the edit modal
+            //         editModal.parentElement.removeChild(editModal);
+
+            //     // Close button clicked
+            //     } else if(modalCloseBtn) {
+            //         // Remove the edit modal
+            //         editModal.parentElement.removeChild(editModal);
+            //     }
+            // } else if() {
+
+            // }
+
+            // // If anything else in the list item is clicked, render the item details
+            // } else {
+            //     console.log(e.target);
+            //     const itemid = e.target.closest('.todolist__item').dataset.itemid;
+            //     toDoListView.renderItemDetails(itemid);
+            // }
 
         }.bind(this));
 

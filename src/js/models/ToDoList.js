@@ -26,6 +26,10 @@ export default class ToDoList {
         return this.itemList.find(item => item.id === itemid);
     }
 
+    getItemIndex(itemid) {
+        return this.itemList.findIndex(item => item.id === itemid);
+    }
+
     updateItem(itemid) {
 
     }

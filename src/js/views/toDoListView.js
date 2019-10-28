@@ -45,13 +45,17 @@ export const calcNumOfPages = (itemLength, itemHeight) => {
     return Math.ceil(itemLength / itemsPerPage);
 };
 
-export const renderEditModal = () => {
+export const getModalFields = () => {
+    return document.querySelector('.edit-modal__input--title').value;
+};
+
+export const renderEditModal = item => {
     const markup = `
         <div class="edit-modal">
             <form class="edit-modal__form">
                 <div class="edit-modal__control">
-                    <label class="edit-modal__title-label edit-modal__label">Title</label>
-                    <input class="edit-modal__title-input edit-modal__input" type="text">
+                    <label class="edit-modal__label--title edit-modal__label">Title</label>
+                    <input class="edit-modal__input--title edit-modal__input" type="text" value="${item.title}">
                 </div>
                 <input class="edit-modal__submit" type="submit">
 
@@ -65,7 +69,27 @@ export const renderEditModal = () => {
     elements.tdl.insertAdjacentHTML('afterbegin', markup);
 };
 
+export const renderItemDetails = item => {
+    const markup = `
+        <div class="details-modal">
+            <div class="details-modal__body">
+                <div class="details-modal__control">
+                    <label class="details-modal__label--title edit-modal__label">Title:</label>
+                    <label class="details-modal__value--title details-modal__value">${item.title}</label>
+                </div>
+            <div>
+            <svg class="details-modal__icon--close details-modal__icon">
+                <use xlink:href="svg/spritesheet.svg#ios-close-outline"></use>
+            </svg>
+        </div>
+    `;
+
+    elements.tdl.insertAdjacentHTML('afterbegin', markup);
+
+};
+
 export const renderToDoList = (itemList, itemHeight, page = 1) => {
+    console.log('Rendering');
     // Set the list height to the available space
     const listHeight = getListHeight();
     elements.tdlItems.style.height = `${listHeight}px`;
