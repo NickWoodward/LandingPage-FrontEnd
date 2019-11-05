@@ -79,7 +79,6 @@ class Controller {
             // Then save the TDL item to the DB
             this.toDoList.saveListItem(item)
                 .then(response => {
-                    console.log(response)
                     toDoListView.renderMessage('Item Added', true, true);
                 })
                 .catch(err => toDoListView.renderMessage('Error: The item was not saved'));
@@ -90,7 +89,6 @@ class Controller {
     }
 
     async deleteListItem(itemid) {
-        console.log(itemid);
         // Remove item from the local list
         this.toDoList.removeItem(itemid);
         // Remove item from the database
@@ -106,7 +104,6 @@ class Controller {
     }
 
     async editListItem(itemid, title) {
-        console.log(itemid);
 
         // Get the item from the local array to populate the new item
         const item = this.toDoList.getItem(itemid);
@@ -133,6 +130,7 @@ class Controller {
                     this.toDoList.getItemList()[itemIndex] = newItem;
                     // Render the new list
                     toDoListView.renderToDoList(this.toDoList.getItemList(), this.itemHeight);
+                    toDoListView.renderMessage('Item Edited', true, true);
                 })
                 .catch(err => {
                     console.log(err);
@@ -186,6 +184,15 @@ class Controller {
                 .catch(err => console.log(err));
         }.bind(this));
 
+        // Add listener for closing and opening modals
+        document.querySelector('body').addEventListener('click', function(e) {
+            const loginModalBackground = e.target.closest('.login-modal-background');
+            const loginModal = e.target.closest('.login-modal');
+
+            if(loginModalBackground && !loginModal)
+                toDoListView.removeLogin();
+        });
+
         // Add listener to TDL form submit
         elements.tdlForm.addEventListener('submit', function (e) {
             e.preventDefault();
@@ -193,8 +200,23 @@ class Controller {
 
         }.bind(this));
 
+        // Add header nav listeners
+        elements.header.addEventListener('click', function(e) {
+            // Login
+            const loginBtn = e.target.closest('.nav--header__login');
+
+            if(loginBtn) {
+                toDoListView.renderLogin();
+                // [email, password] = toDoListView.getLoginDetails();
+                // this.toDoList.login(email, password);
+            }
+        }.bind(this));
+
+
+
         // Add listeners to list items, item controls, modals and modal controls
         elements.tdl.addEventListener('click', function (e) {
+
             // List Item / Controls
             const listItem = e.target.closest('.todolist__item');
             const deleteBtn = e.target.closest('.todolist__icon--close');
@@ -252,59 +274,10 @@ class Controller {
                     editModal.parentElement.removeChild(editModal);
                 }
 
-                // DETAILS MODAL EVENT
+            // DETAILS MODAL EVENT
             } else if (detailsModalClose) {
                 detailsModal.parentElement.removeChild(detailsModal);
-            }
-
-            // // Close button clicked
-            // if (closeBtn) {
-            //     // Get the itemid
-            //     const itemid = closeBtn.closest('.todolist__item').dataset.itemid;
-            //     this.deleteListItem(itemid);
-            // // Edit button clicked
-            // } else if (editBtn) {
-            //     // Get the list item id
-            //     const itemid = editBtn.closest('.todolist__item').dataset.itemid;
-            //     // Store the itemid in the controller, to be later accessed in the modal
-            //     this.currentItemid = itemid;
-
-            //     // Pass the relevant object to the view to be rendered
-            //     const item = this.toDoList.getItem(itemid);
-            //     toDoListView.renderEditModal(item);
-
-            // // Edit modal already visible
-            // } else if (editModal) {
-
-            //     // Submit button clicked
-            //     if(modalSubmit) {
-            //         e.preventDefault();
-
-            //         // Get form data
-            //         const modalTitle = toDoListView.getModalFields();
-
-            //         // Use the controller's current item property to edit the correct list item
-            //         if(this.currentItemid) this.editListItem(this.currentItemid, modalTitle);
-
-            //         // Remove the edit modal
-            //         editModal.parentElement.removeChild(editModal);
-
-            //     // Close button clicked
-            //     } else if(modalCloseBtn) {
-            //         // Remove the edit modal
-            //         editModal.parentElement.removeChild(editModal);
-            //     }
-            // } else if() {
-
-            // }
-
-            // // If anything else in the list item is clicked, render the item details
-            // } else {
-            //     console.log(e.target);
-            //     const itemid = e.target.closest('.todolist__item').dataset.itemid;
-            //     toDoListView.renderItemDetails(itemid);
-            // }
-
+                        } 
         }.bind(this));
 
         // Add listeners to pagination nav items

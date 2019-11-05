@@ -5,6 +5,10 @@ export const getTitle = () => {
     return elements.tdlTitleInput.value;
 };
 
+export const getLoginDetails = () => {
+
+};
+
 export const clearInputs = () => {
     elements.tdlTitleInput.value = '';
 };
@@ -52,13 +56,20 @@ export const getModalFields = () => {
 export const renderEditModal = item => {
     const markup = `
         <div class="edit-modal">
-            <form class="edit-modal__form">
+            <form class="edit-modal__body">
                 <div class="edit-modal__control">
                     <label class="edit-modal__label--title edit-modal__label">Title</label>
                     <input class="edit-modal__input--title edit-modal__input" type="text" value="${item.title}">
                 </div>
-                <input class="edit-modal__submit" type="submit">
-
+                <div class="edit-modal__control">
+                    <label class="edit-modal__label--author edit-modal__label">Author:</label>
+                    <input class="edit-modal__input--author edit-modal__input" value="${item.author}">
+                </div>
+                <div class="edit-modal__control">
+                    <label class="edit-modal__label--content edit-modal__label">Content:</label>
+                    <textarea class="edit-modal__input--textarea edit-modal__input">${item.content}</textarea>
+                </div>
+                <input class="edit-modal__submit modal__submit" type="submit">
             </form>
             <svg class="edit-modal__icon--close edit-modal__icon">
                 <use xlink:href="svg/spritesheet.svg#ios-close-outline"></use>
@@ -74,10 +85,18 @@ export const renderItemDetails = item => {
         <div class="details-modal">
             <div class="details-modal__body">
                 <div class="details-modal__control">
-                    <label class="details-modal__label--title edit-modal__label">Title:</label>
+                    <label class="details-modal__label--title details-modal__label">Title:</label>
                     <label class="details-modal__value--title details-modal__value">${item.title}</label>
                 </div>
-            <div>
+                <div class="details-modal__control">
+                    <label class="details-modal__label--author details-modal__label">Author:</label>
+                    <label class="details-modal__value--author details-modal__value">${item.author}</label>
+                </div>
+                <div class="details-modal__control">
+                    <label class="details-modal__label--content details-modal__label">Content:</label>
+                    <label class="details-modal__value--content details-modal__value">${item.content}</label>
+                </div>
+            </div>
             <svg class="details-modal__icon--close details-modal__icon">
                 <use xlink:href="svg/spritesheet.svg#ios-close-outline"></use>
             </svg>
@@ -89,7 +108,6 @@ export const renderItemDetails = item => {
 };
 
 export const renderToDoList = (itemList, itemHeight, page = 1) => {
-    console.log('Rendering');
     // Set the list height to the available space
     const listHeight = getListHeight();
     elements.tdlItems.style.height = `${listHeight}px`;
@@ -155,6 +173,40 @@ const renderItem = item => {
     // </svg >
 
     elements.tdlItems.insertAdjacentHTML('beforeend', markup);
+};
+
+export const renderLogin = () => {
+    const markup = `
+        <div class="login-modal-background">
+            <form class="login-modal">
+                <div class="login-modal__item-wrapper">
+                    <div class="login-modal__message">Please enter your login details:</div>
+                </div>    
+                <div class="login-modal__item-wrapper">
+                    <label class="login-modal__email-label login-modal__label">Email:</label>
+                    <input class="login-modal__email-input login-modal__input" autofocus>
+                </div>
+                <div class="login-modal__item-wrapper">
+                    <label class="login-modal__password-label login-modal__label">Password:</label>
+                    <input class="login-modal__password-input login-modal__input">
+                </div>
+                <input class="login-modal__submit-btn modal__submit" type="submit" value="Login">
+            </form>
+        </div>    
+        `;
+
+    // Check to see if the modal is not already present
+    const modal = document.querySelector('.login-modal-background');
+    if(!modal)
+        elements.hero.insertAdjacentHTML('beforeend', markup);
+    else 
+        removeLogin();
+};
+
+export const removeLogin = () => {
+    const modal = document.querySelector('.login-modal-background');
+    if(modal)
+        modal.parentElement.removeChild(modal);
 };
 
 const renderPaginationControls = (page, numOfItems, itemsPerPage) => {

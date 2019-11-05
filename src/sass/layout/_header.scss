@@ -1,6 +1,7 @@
 header {
     position: fixed;
     display: flex;
+    justify-content: space-between;
 
     background: $component-background-color;
     padding: 0 $page-padding--m;

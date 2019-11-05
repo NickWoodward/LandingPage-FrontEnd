@@ -59,16 +59,16 @@ export default class ToDoList {
         });
 
         try {
-            await axios.post(
+            let response = await axios.post(
                 'http://127.0.0.1:8080/item-list/item',
                 data,
                 {
                     headers: headers
                 }
-            )
-                .then(response => {
-                    console.log(`${response.status}: ${response.data.message}`);
-                });
+            );
+
+            console.log(`(${response.status}) ${response.data.message}`);
+
         } catch (err) {
             console.log(err.response.data.message);
         }
@@ -76,10 +76,8 @@ export default class ToDoList {
 
     async deleteListItem(itemid) {
         try {
-            await axios.delete('http://127.0.0.1:8080/item-list/items/' + itemid)
-                .then(response => {
-                    console.log(`Item Deleted`);
-                });
+            let response = await axios.delete('http://127.0.0.1:8080/item-list/items/' + itemid);
+            console.log(`(${response.status}) ${response.data.message}`);
 
         } catch (err) {
             console.log(err);
@@ -91,6 +89,7 @@ export default class ToDoList {
         const headers = {
             'Content-Type': 'application/json'
         };
+
         const data = JSON.stringify({
             title: item.title,
             content: item.content,
@@ -99,12 +98,15 @@ export default class ToDoList {
         });
 
         try{
-            await axios.put('http://127.0.0.1:8080/item-list/item/' + id, data, {headers})
-                .then(response => {
-                    console.log(data);
-                });
+            let response = await axios.put('http://127.0.0.1:8080/item-list/item/' + id, data, {headers})
+            console.log(`(${response.status}) ${response.data.message}`);
+
         } catch(err) {
             console.log(err);
         }
+    }
+
+    async login(email, password) {
+        console.log(email, password);
     }
 }

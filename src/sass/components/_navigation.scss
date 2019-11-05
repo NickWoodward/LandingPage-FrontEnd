@@ -1,0 +1,9 @@
+.nav--header{
+    display: flex;
+    align-items: center;
+
+    &__item {
+        padding: 1rem;
+        cursor: pointer;
+    }
+}

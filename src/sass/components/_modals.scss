@@ -1,28 +1,63 @@
-.edit-modal {
+.modal__submit {
+    border: $thin-dark-border;
+    background: rgba(230, 230, 230, 0.877);
+    border-radius: 3px;
+    color: $text-dark-grey-color;
+}
+
+.edit-modal {  
+    &__control {
+        &:nth-last-child(2) {
+            flex-grow: 1;
+        }
+    }
+}
+
+.details-modal {
+    &__control {
+        &:last-child {
+            flex-grow: 1;
+        }
+    }
+}
+
+.details-modal, .edit-modal {
     position: absolute;
     display: flex;
-    align-items: flex-start;
 
     width: 100%;
     height: 100%;
 
     background: rgb(255, 255, 255);
+
+    z-index: 100;
+
+    padding: $todolist-form-padding--v 2rem;
+
 
     & * {
         // border: 1px solid red;
     }
 
-    z-index: 100;
-
-    &__form {
+    &__body {
         display: flex;
         flex-direction: column;
+        justify-content: flex-start;
         align-items: flex-start;
         flex-grow: 1;
-
         height: 100%;
-        padding-left: 4rem;
-        padding-top: 3rem;
+
+        padding: 2rem 1rem;
+    }
+
+    &__control {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+
+        &:not(:last-child) {
+            margin-bottom: 1rem;
+        }
     }
 
     &__icon {
@@ -31,76 +66,93 @@
         cursor: pointer;
 
         &--close {
-            margin-top: 2rem;
-            margin-right: 2rem;
+            margin-left: 2rem;
         }
     }
 
-    &__control {
+    &__label{
+        // 1.6rem font-size + .5 padding matches &__value 
+        padding: .5rem;
+    }
+
+    &__value, &__input {
         display: flex;
-        flex-direction: column;
-    }
+        align-items: center;
 
-    &__label {
+        flex-basis: $tdl-input-width;
+
+        padding: .5rem .8rem;
         
+        font-size: 1.6rem;
+        border: $thin-dark-border;
+
+        &--content, &--textarea {
+            height: 100%;
+        }
+
+        &--textarea {
+            text-align: start;
+            resize: none;
+        }
     }
 
-    &__input {
-        height: 3rem;
-        padding: 1rem;
+    &__value {
+        &--content {
+            align-items: flex-start;
+        }
     }
-    
+
+
     &__submit {
+        align-self: flex-end;
+
         margin-top: 1rem;
         padding: 1rem 2.2rem;
-        border: $thin-dark-border;
-        background: rgba(230, 230, 230, 0.877);
-        border-radius: 3px;
-        color: $text-dark-grey-color;
+
     }
 }
 
-.details-modal {
-    position: absolute;
+.login-modal {
     display: flex;
 
-    width: 100%;
-    height: 100%;
-
-    background: rgb(255, 255, 255);
-
-    z-index: 100;
-
-    border: 1px solid red;
-
     & * {
-        border: 1px solid red;
+        // border: 1px solid red;
     }
 
-    &__body {
+    flex-direction: column;
+    align-items: space-around;
+
+    background: white;
+    border-radius: .5rem;
+    padding: 3rem 3rem;
+
+    &-background {
+        position: absolute;
         display: flex;
+        justify-content: center;
+        align-items: center;
+
         width: 100%;
-        height: 100%;
+        height: calc(100% - #{$header-height--m});
+        bottom: 0;
+
+        background: rgba(0, 0, 0, 0.74);
     }
 
-    &__control {
+    &__label{
+        margin-right: 1rem;
+    }
+
+    &__item-wrapper {
         display: flex;
-    }
+        justify-content: space-between;
 
-    &__icon {
-        width: $modal-icon-size--m;
-        height: $modal-icon-size--m;
-        cursor: pointer;
-
-        &--close {
-            margin-top: 2rem;
-            margin-right: 2rem;
+        &:not(:last-child) {
+            margin-bottom: 2rem;
         }
     }
 
-    &__control {
-        display: flex;
-        flex-direction: column;
+    &__submit-btn {
+        padding: 1rem;
     }
-
 }
