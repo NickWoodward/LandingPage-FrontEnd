@@ -107,6 +107,19 @@ export default class ToDoList {
     }
 
     async login(email, password) {
-        console.log(email, password);
+        const data = JSON.stringify({
+            email: email, 
+            password: password
+        });
+        const headers = {
+            'Content-Type': 'application/json'
+        };
+
+        try {
+            let response = await axios.put('http://127.0.0.1:8080/auth/login', data, {headers});
+            console.log(`${response.status} ${response.data.message}`);
+        } catch(err) {
+            console.log(err);
+        }
     }
 }

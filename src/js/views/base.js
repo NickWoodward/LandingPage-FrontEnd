@@ -6,5 +6,6 @@ export const elements = {
     tdlItems: document.querySelector('.todolist__items'),
     tdlForm: document.querySelector('.todolist__form'),
     tdlControls: document.querySelector('.todolist__nav'),
-    tdlTitleInput: document.querySelector('.todolist__title-input'),
+    tdlTitleInput: document.querySelector('.todolist__title-input')
+
 };

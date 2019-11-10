@@ -6,7 +6,15 @@ export const getTitle = () => {
 };
 
 export const getLoginDetails = () => {
+    const email = document.querySelector('.login-modal__email-input').value;
+    const password = document.querySelector('.login-modal__password-input').value;
+    const err = validateLogin(email, password);
 
+    if(!err.error) {
+        return { email, password };
+    } else {
+        return { error: err.error };
+    }
 };
 
 export const clearInputs = () => {
@@ -314,4 +322,8 @@ export const deleteMessage = element => {
 
 export const validateListItem = input => {
     return validate.validateListItem(input)
+}
+
+export const validateLogin = (email, password) => {
+    return validate.validateLogin(email, password);
 }

@@ -8,6 +8,15 @@ export const validateListItem = item => {
         author: Joi.string().min(2).required(),
         completed: Joi.boolean()
     });
-    
+
     return schema.validate(item);
+};
+
+export const validateLogin = (email, password) => {
+    const schema = Joi.object({
+        email: Joi.string().required(),
+        password: Joi.string().required()
+    });
+
+    return schema.validate({email: email, password: password});
 };

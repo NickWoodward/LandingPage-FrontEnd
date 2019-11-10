@@ -184,14 +184,35 @@ class Controller {
                 .catch(err => console.log(err));
         }.bind(this));
 
-        // Add listener for closing and opening modals
+        // Add listener for the login modal
         document.querySelector('body').addEventListener('click', function(e) {
+            // LOGIN MODAL
             const loginModalBackground = e.target.closest('.login-modal-background');
             const loginModal = e.target.closest('.login-modal');
 
+            // LOGIN SUBMIT
+            const loginModalSubmitBtn = e.target.closest('.login-modal__submit-btn');
+
+            // SUBMIT LOGIN MODAL
+            if(loginModalSubmitBtn) {
+                e.preventDefault();
+
+                const login = toDoListView.getLoginDetails();
+                if(login.error) {
+                    console.log(login.error);
+                } else {
+                    const {email, password} = login;
+                    this.toDoList.login(email, password);
+                }
+                // if(details.email && details.pass) this.toDoList.login(details.email, details.pass);
+            } 
+
+            // REMOVE LOGIN MODAL
             if(loginModalBackground && !loginModal)
                 toDoListView.removeLogin();
-        });
+
+            
+        }.bind(this));
 
         // Add listener to TDL form submit
         elements.tdlForm.addEventListener('submit', function (e) {
