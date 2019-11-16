@@ -97,29 +97,45 @@ export default class ToDoList {
             completed: item.completed
         });
 
-        try{
-            let response = await axios.put('http://127.0.0.1:8080/item-list/item/' + id, data, {headers})
+        try {
+            let response = await axios.put('http://127.0.0.1:8080/item-list/item/' + id, data, { headers })
             console.log(`(${response.status}) ${response.data.message}`);
 
-        } catch(err) {
+        } catch (err) {
             console.log(err);
         }
     }
 
-    async login(email, password) {
-        const data = JSON.stringify({
-            email: email, 
-            password: password
-        });
+    login(email, password) {
+
         const headers = {
             'Content-Type': 'application/json'
         };
 
-        try {
-            let response = await axios.put('http://127.0.0.1:8080/auth/login', data, {headers});
-            console.log(`${response.status} ${response.data.message}`);
-        } catch(err) {
-            console.log(err);
-        }
+        const data = JSON.stringify({
+            email: email,
+            password: password
+        });
+
+        return axios.post('http://127.0.0.1:8080/auth/login', data, { headers })
+            .then(res => {
+                res.data.message = 'Logged in successful';
+                return Promise.resolve(res);
+            })
+            .catch(err => {
+                // Server responded with status code outside 2xx
+                if (err.response) {
+                    // throw new Error(err.response.data.message);
+                    return Promise.reject(new Error(err.response.data.message));
+                // Request was made but no response received
+                } else if (err.request) {
+                    return Promise.reject(new Error('No response'));
+                    // Something went wrong setting up the request
+                } else {
+                    return Promise.reject(err);
+                }
+            });
+
     }
 }
+

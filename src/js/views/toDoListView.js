@@ -17,6 +17,10 @@ export const getLoginDetails = () => {
     }
 };
 
+export const displayLoginMessage = msg => {
+    console.log(msg);
+};
+
 export const clearInputs = () => {
     elements.tdlTitleInput.value = '';
 };
@@ -186,7 +190,7 @@ const renderItem = item => {
 export const renderLogin = () => {
     const markup = `
         <div class="login-modal-background">
-            <form class="login-modal">
+            <form class="login-modal" action="" method="POST">
                 <div class="login-modal__item-wrapper">
                     <div class="login-modal__message">Please enter your login details:</div>
                 </div>    
@@ -290,7 +294,7 @@ const renderEndElement = () => {
 
     elements.tdlItems.insertAdjacentHTML('beforeend', markup);
 };
-
+ 
 export const renderMessage = (msg, status, fade) => {
     // Guard against old message if one is still present (shouldn't be)
     const old = document.querySelector('.todolist__message');

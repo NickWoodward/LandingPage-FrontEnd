@@ -190,21 +190,31 @@ class Controller {
             const loginModalBackground = e.target.closest('.login-modal-background');
             const loginModal = e.target.closest('.login-modal');
 
-            // LOGIN SUBMIT
+            // LOGIN SUBMIT BTN
             const loginModalSubmitBtn = e.target.closest('.login-modal__submit-btn');
 
             // SUBMIT LOGIN MODAL
             if(loginModalSubmitBtn) {
                 e.preventDefault();
 
+                // Frontend validation
                 const login = toDoListView.getLoginDetails();
+
                 if(login.error) {
-                    console.log(login.error);
+                    toDoListView.displayLoginMessage(login.error);
+                // Login
                 } else {
-                    const {email, password} = login;
-                    this.toDoList.login(email, password);
+                    this.toDoList.login(login.email, login.password)
+                        .then(res => {
+                            // Display login confirmation
+                            toDoListView.displayLoginMessage(res.data.message);
+                            // Save token
+                            // console.log(res.data.token);
+                        })
+                        .catch(err => {
+                            toDoListView.displayLoginMessage('Error: ' + err.message);
+                        });
                 }
-                // if(details.email && details.pass) this.toDoList.login(details.email, details.pass);
             } 
 
             // REMOVE LOGIN MODAL
@@ -233,7 +243,7 @@ class Controller {
             }
         }.bind(this));
 
-
+ 
 
         // Add listeners to list items, item controls, modals and modal controls
         elements.tdl.addEventListener('click', function (e) {

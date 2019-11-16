@@ -14,7 +14,7 @@ export const validateListItem = item => {
 
 export const validateLogin = (email, password) => {
     const schema = Joi.object({
-        email: Joi.string().required(),
+        email: Joi.string().required().email({ minDomainSegments: 2, tlds: { allow: ['com', 'uk', 'net'] } }),
         password: Joi.string().required()
     });
 
