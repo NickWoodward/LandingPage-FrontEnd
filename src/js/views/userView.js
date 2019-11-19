@@ -1,8 +1,7 @@
 import { elements } from './base';
 
-export const greetUser = (timeOfDay) => {
-    const userName = 'Nick';
+export const greetUser = (timeOfDay, userName = '') => {
     const greeting = `${timeOfDay} ${userName}`;
 
-    elements.greeting.innerHTML = greeting;
+    elements.greeting.textContent = greeting;
 };

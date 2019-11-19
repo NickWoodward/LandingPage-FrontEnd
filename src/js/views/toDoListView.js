@@ -331,3 +331,18 @@ export const validateListItem = input => {
 export const validateLogin = (email, password) => {
     return validate.validateLogin(email, password);
 }
+
+export const updateLoginView = () => {
+    const logoutItem = document.querySelector('.logoutItem');
+
+    if(!logoutItem) {
+        // Remove the login element
+        elements.navHeader.removeChild(elements.loginItem);
+        // Add logout element
+        elements.navHeader.insertAdjacentHTML('beforeend', '<div class="nav--header__logout nav--header__item">Logout</div>');
+    } else {
+        elements.navHeader.removeChild(document.querySelector('.nav--header__logout'));
+        // Add login element
+        elements.navHeader.insertAdjacentHTML('beforeend', '<div class="nav--header__login nav--header__item">Login</div>');
+    }
+}
