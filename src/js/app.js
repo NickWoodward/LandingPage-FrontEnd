@@ -25,8 +25,8 @@ class Controller {
     };
 
 
-    updateUserView() {
-        userView.greetUser(new DateAndTime().getTimeOfDay());
+    updateUserView(username) {
+        userView.greetUser(new DateAndTime().getTimeOfDay(), username);
     };
 
     updateTDLView(todolist) {
@@ -208,8 +208,11 @@ class Controller {
                         .then(res => {
                             // Display login confirmation
                             toDoListView.displayLoginMessage(res.data.message);
-                            // Save token
-                            // console.log(res.data.token);
+                            // Remove the login form
+                            toDoListView.removeLogin();
+                            // Update view
+                            toDoListView.updateLoginView();
+                            this.updateUserView(res.data.username);
                         })
                         .catch(err => {
                             toDoListView.displayLoginMessage('Error: ' + err.message);
@@ -235,11 +238,12 @@ class Controller {
         elements.header.addEventListener('click', function(e) {
             // Login
             const loginBtn = e.target.closest('.nav--header__login');
+            const logoutBtn = e.target.closest('.nav--header__logout');
 
             if(loginBtn) {
                 toDoListView.renderLogin();
-                // [email, password] = toDoListView.getLoginDetails();
-                // this.toDoList.login(email, password);
+            } else if(logoutBtn) {
+                this.updateUserView();
             }
         }.bind(this));
 

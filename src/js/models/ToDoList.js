@@ -119,6 +119,7 @@ export default class ToDoList {
 
         return axios.post('http://127.0.0.1:8080/auth/login', data, { headers })
             .then(res => {
+                window.localStorage.setItem('token', res.data.token);
                 res.data.message = 'Logged in successful';
                 return Promise.resolve(res);
             })
