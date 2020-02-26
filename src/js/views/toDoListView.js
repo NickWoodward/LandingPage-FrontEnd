@@ -333,11 +333,11 @@ export const validateLogin = (email, password) => {
 }
 
 export const updateLoginView = () => {
-    const logoutItem = document.querySelector('.logoutItem');
+    const logoutItem = document.querySelector('.nav--header__logout');
 
     if(!logoutItem) {
         // Remove the login element
-        elements.navHeader.removeChild(elements.loginItem);
+        elements.navHeader.removeChild(document.querySelector('.nav--header__login'));
         // Add logout element
         elements.navHeader.insertAdjacentHTML('beforeend', '<div class="nav--header__logout nav--header__item">Logout</div>');
     } else {

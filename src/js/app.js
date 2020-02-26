@@ -140,7 +140,7 @@ class Controller {
 
     // Get DB data
     async getTDLData() {
-        return await this.toDoList.getData();
+        return await this.toDoList.getData(window.localStorage.getItem('token'));
     };
 
     // David Walsh function for detecting needed prefixes
@@ -165,23 +165,26 @@ class Controller {
 
         // Add listeners
         window.addEventListener('load', function () {
+            const user = window.localStorage.getItem('username');
 
-            // Update the User View
-            this.updateUserView();
-
+            if(user) {
+                // Update the User View
+                this.updateUserView(user);
+                // Change login nav item
+                toDoListView.updateLoginView();
+            }
+                    
             // Get TDL Model data from the DB
             this.getTDLData()
                 .then(() => {
                     // Get the todolist where the DB data was stored
                     const items = this.toDoList.getItemList();
 
-                    // Calculate and display the number of items that can fit in the list 
-                    // toDoListView.calculateNumOfItems(items.length, '3rem');
-
-
                     toDoListView.renderToDoList(items, this.itemHeight);
                 })
-                .catch(err => console.log(err));
+                .catch(err => {
+                    console.log(err)
+                });
         }.bind(this));
 
         // Add listener for the login modal
@@ -206,6 +209,7 @@ class Controller {
                 } else {
                     this.toDoList.login(login.email, login.password)
                         .then(res => {
+                            window.localStorage.setItem('username', res.data.username);
                             // Display login confirmation
                             toDoListView.displayLoginMessage(res.data.message);
                             // Remove the login form
@@ -219,6 +223,7 @@ class Controller {
                         });
                 }
             } 
+
 
             // REMOVE LOGIN MODAL
             if(loginModalBackground && !loginModal)
@@ -244,6 +249,7 @@ class Controller {
                 toDoListView.renderLogin();
             } else if(logoutBtn) {
                 this.updateUserView();
+                toDoListView.updateLoginView();
             }
         }.bind(this));
 

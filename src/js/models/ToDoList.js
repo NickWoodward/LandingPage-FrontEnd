@@ -36,12 +36,16 @@ export default class ToDoList {
 
 
     // UPDATE/RETRIEVE DATA ON/FROM SERVER
-    async getData() {
+    async getData(token) {
+        const headers = {
+            Authorization: 'Bearer ' + token
+        };
+
         try {
-            const result = await axios('http://127.0.0.1:8080/item-list/items');
+            const result = await axios('http://127.0.0.1:8080/item-list/items', { headers });
             this.itemList = result.data;
         } catch (err) {
-            console.log(err);
+            console.log('Error: ', err.response.data.message);
         }
     }
 
@@ -126,7 +130,7 @@ export default class ToDoList {
             .catch(err => {
                 // Server responded with status code outside 2xx
                 if (err.response) {
-                    // throw new Error(err.response.data.message);
+                    console.log('here');
                     return Promise.reject(new Error(err.response.data.message));
                 // Request was made but no response received
                 } else if (err.request) {
